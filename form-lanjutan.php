@@ -1,10 +1,32 @@
 <?php
+
+  include 'conn.php';
+
+  $query = "TRUNCATE TABLE dokumen";
+  mysqli_query($conn, $query);
   // Get the classification types and documents from the query parameters
   $classificationTypes = $_GET['classificationTypes'];
   $encodedDocuments = $_GET['documents'];
 
   // Decode the encoded JSON string and parse it into a PHP array
   $documents = json_decode(urldecode($encodedDocuments), true);
+
+  if(isset($_POST['ya'])){
+    // echo "jalan";
+    // die;
+    foreach ($documents as $document) {
+      $text = $document['text'];
+      $classification = $document['classification'];
+      $query = "INSERT INTO dokumen (teks, jenis) VALUES ('$text', '$classification')";
+      if (mysqli_query($conn, $query)) {
+        echo "New record created successfully";
+      } else {
+        echo "Error: " . $query . "<br>" . mysqli_error($conn);
+      }
+      
+    }
+    header("Location: form-testing.php");
+  }
 ?>
 
 <!DOCTYPE html>
@@ -69,13 +91,45 @@
         <?php endforeach; ?>
       </tbody>
     </table>
+    <div class="container d-flex justify-content-center" >
+    <a href="form.php" class="btn btn-secondary mx-2">Kembali</a>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#konfirmasiModal">Simpan</button>
+    </div>
+    <!-- Modal -->
+    <div class="modal" tabindex="-1" role="dialog" id="konfirmasiModal">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Konfirmasi</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Apakah Anda yakin ingin menyimpan?</p>
+      </div>
+      <div class="modal-footer">
+        <form action="" method="POST">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        <button type="submit" name="ya"  class="btn btn-primary">Ya</button>
+        </form>
+      </div>
+    </div>
   </div>
+  <!-- Konten modal -->
+</div>
+  
+</div>
+  </div>
+  
 </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="asset/vendor/jquery/jquery.min.js"></script>
