@@ -44,7 +44,7 @@
                                         
                                         
                                             <p>Muhammad Eri Setyawan - 2011501778</p>
-                                            <p>Dzulfikar Saif assalam - </p>
+                                            <p>Dzulfikar Saif assalam - 2011500770</p>
                                         
                                     </div>
                                    

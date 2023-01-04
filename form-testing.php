@@ -1,11 +1,7 @@
 <?php
 include 'conn.php';
 
-if(isset($_POST['testing'])){   
-    $kalimat = $_POST['kalimat'];
-    var_dump($kalimat);
-    $die;
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -63,6 +59,52 @@ if(isset($_POST['testing'])){
     </div>
   </div>
 </div>
+
+<?php
+if(isset($_POST['testing'])){   
+  $kalimat = $_POST['kalimat'];
+  $output = exec("python knn.py $kalimat", $output);
+  // Tambahkan kodingan di bawah ini
+  $html = "
+  <div class='row justify-content-center'>
+    <div class='col-xl-10 col-lg-12 col-md-9'>
+      <div class='card o-hidden border-0 shadow-lg my-5'>
+        <div class='card-body p-0'>
+          <!-- Nested Row within Card Body -->
+          <div class='row'>
+            <div class='col-lg-12'>
+              <div class='p-5'>
+                <div class='text-center'>
+                  <h1 class='h4 text-gray-900 mb-4'>Hasil</h1> 
+                </div>Kalimat =    
+  ";
+
+  $hasil = "<br>
+  <br>
+  <br>
+  hasil = 
+  "
+  ;
+
+  // Tampilkan kodingan HTML tersebut
+  
+
+  $html2 = "
+  <br>
+  <a class='btn btn-primary mt-4' href='index.php'>Kembali Ke halaman Awal</a>
+  </div>
+  
+  </div>
+</div>
+</div>
+</div>
+</div>
+</div>";
+
+echo $html.$kalimat.$hasil.$output.$html2;
+}
+
+?>
 
     <!-- Bootstrap core JavaScript-->
     <script src="asset/vendor/jquery/jquery.min.js"></script>
