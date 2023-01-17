@@ -37,7 +37,7 @@ vectorizer = TfidfVectorizer()
 X = vectorizer.fit_transform(dokumen)
 
 # Membuat objek KNeighborsClassifier
-classifier = KNeighborsClassifier(n_neighbors=3)
+classifier = KNeighborsClassifier(metric='cosine',n_neighbors=3)
 
 # Memasukkan data latih ke dalam classifier
 classifier.fit(X, label)
