@@ -60,6 +60,138 @@ include 'conn.php';
   </div>
 </div>
 
+<div class="text-center">
+<button type="button" class="btn btn-primary mr-5" data-toggle="modal" data-target="#daftarDokumenModal">Daftar Dokumen</button>
+    <button type="button" class="btn btn-primary">Daftar Klasifikasi</button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="daftarDokumenModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Daftar Dokumen</h5>
+        
+        
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#tambahDokumenModal">Tambah Dokumen</button>
+        <table class="table table-bordered table-striped table-hover table-layout:fixed">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th  style="width:72%">Teks</th>
+              <th>Klasifikasi</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php 
+              // Kodingan untuk menampilkan data dari tabel dokumen dan klasifikasi
+              $query = "SELECT dokumen.id, dokumen.teks, dokumen.klasifikasi_id, klasifikasi.nama FROM dokumen INNER JOIN klasifikasi ON dokumen.klasifikasi_id = klasifikasi.id";
+              $result = mysqli_query($conn, $query);
+              $no = 1;
+              while($row = mysqli_fetch_array($result)){
+            ?>
+            <tr>
+              <td><?php echo $no++; ?></td>
+              <td><?php echo $row['teks']; ?></td>
+              <td><?php echo $row['nama']; ?></td>
+              <td>
+              <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editDokumenModal" data-id="<?php echo $row['id']; ?>" data-teks="<?php echo $row['teks']; ?>" data-klasifikasi_id="<?php echo $row['klasifikasi_id']; ?>">Edit</button>
+                <a href="hapus_dokumen.php?id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</a>
+              </td>
+            </tr>
+            <?php } ?>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="tambahDokumenModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Tambah Dokumen</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="insert_dokumen.php">
+          <div class="form-group">
+            <label for="teks">Teks</label>
+            <textarea class="form-control" name="teks" id="teks" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="klasifikasi_id">Klasifikasi</label>
+            <select class="form-control" name="klasifikasi_id" id="klasifikasi_id">
+              <?php
+              $query = mysqli_query($conn, "SELECT id, nama FROM klasifikasi");
+              while ($data = mysqli_fetch_array($query)) {
+                echo "<option value='" . $data['id'] . "'>" . $data['nama'] . "</option>";
+              }
+              ?>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" name="submit">Save changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editDokumenModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Dokumen</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="update_dokumen.php">
+          <input type="hidden" name="id" id="id">
+          <div class="form-group">
+            <label for="teks">Teks</label>
+            <textarea class="form-control" name="teks" id="teks" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="klasifikasi_id">Klasifikasi</label>
+            <select class="form-control" name="klasifikasi_id" id="klasifikasi_id">
+              <?php
+              $query = mysqli_query($conn, "SELECT id, nama FROM klasifikasi");
+              while ($data = mysqli_fetch_array($query)) {
+                $selected = ($data['id'] == $klasifikasi_id) ? 'selected' : '';
+                echo "<option value='" . $data['id'] . "' " . $selected . ">" . $data['nama'] . "</option>";
+              }
+              ?>
+            </select>
+              </div>
+              </div>
+              <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+              </div>
+              </form>
+              </div>
+              
+                </div>
+              </div>
+
+
 <?php
 if(isset($_POST['testing'])){   
   $kalimat = $_POST['kalimat'];
@@ -119,4 +251,22 @@ echo $html.$kalimat.$hasil.$output.$html2;
 </body>
 
 </html>
+
+<script>
+$('#editDokumenModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget)
+  var id = button.data('id')
+  var teks = button.data('teks')
+  var klasifikasi_id = button.data('klasifikasi_id')
+  console.log(klasifikasi_id)
+  var modal = $(this)
+  modal.find('.modal-body #id').val(id)
+modal.find('.modal-body #teks').text(teks)
+modal.find('.modal-body #klasifikasi_id').val(klasifikasi_id)
+})
+</script>
+
+
+
+ 
 
