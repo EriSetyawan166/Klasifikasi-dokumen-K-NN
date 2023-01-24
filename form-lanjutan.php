@@ -6,27 +6,40 @@
   mysqli_query($conn, $query);
   // Get the classification types and documents from the query parameters
   $classificationTypes = $_GET['classificationTypes'];
-  $encodedDocuments = $_GET['documents'];
+  $classificationTypes = explode(',', $classificationTypes);
+  
+$encodedDocuments = $_GET['documents'];
 
-  // Decode the encoded JSON string and parse it into a PHP array
-  $documents = json_decode(urldecode($encodedDocuments), true);
+$documents = json_decode(urldecode($encodedDocuments), true);
+// var_dump($documents);
+//   die;
 
-  if(isset($_POST['ya'])){
-    // echo "jalan";
+// insert classification types into classification table
+if(isset($_POST['ya'])){
+  foreach ($classificationTypes as $classification) {
+    $classification = trim($classification);
+    $query = "INSERT INTO klasifikasi (nama) VALUES ('$classification')";
+    mysqli_query($conn, $query);
+}
+
+// insert documents into documents table and establish relationship with classification table
+foreach ($documents as $document) {
+    $text = $document['text'];
+    $classification = trim($document['classification']);
+    // var_dump($classification);
     // die;
-    foreach ($documents as $document) {
-      $text = $document['text'];
-      $classification = $document['classification'];
-      $query = "INSERT INTO dokumen (teks, jenis) VALUES ('$text', '$classification')";
-      if (mysqli_query($conn, $query)) {
-        echo "New record created successfully";
-      } else {
-        echo "Error: " . $query . "<br>" . mysqli_error($conn);
-      }
-      
-    }
-    header("Location: form-testing.php");
-  }
+    $result = mysqli_query($conn, "SELECT id FROM klasifikasi WHERE nama = '$classification'");
+    $classification_id = mysqli_fetch_assoc($result)['id'];
+    // var_dump($classification_id);
+    // die;
+    $query = "INSERT INTO dokumen (teks, klasifikasi_id) VALUES ('$text', '$classification_id')";
+    mysqli_query($conn, $query);
+}
+
+header("Location: form-testing.php");
+}
+
+
 ?>
 
 <!DOCTYPE html>

@@ -20,14 +20,12 @@ dokumen = []
 label = []
 
 mycursor = mydb.cursor()
-mycursor.execute("SELECT * FROM dokumen")
+mycursor.execute("SELECT dokumen.teks, klasifikasi.nama FROM dokumen JOIN klasifikasi ON dokumen.klasifikasi_id = klasifikasi.id")
 myresult = mycursor.fetchall()
 
 for x in myresult:
-    
-    dokumen.append(x[1])
-    label.append(x[2])
-
+    dokumen.append(x[0])
+    label.append(x[1])
 
 
 # Membuat objek TfidfVectorizer

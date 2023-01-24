@@ -26,7 +26,8 @@
 <script>
   // Retrieve the classification types and documents from the query string
   const searchParams = new URLSearchParams(window.location.search);
-  const classificationTypes = JSON.parse(decodeURIComponent(searchParams.get('classificationTypes')));
+  const classificationTypes = JSON.parse(decodeURIComponent(searchParams.get('classificationTypes').replace(/^\s+/,'')));
+
   const documents = JSON.parse(decodeURIComponent(searchParams.get('documents')));
   
   // Use the classification types and documents as needed in your code
