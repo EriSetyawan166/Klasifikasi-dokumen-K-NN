@@ -1,3 +1,28 @@
+<script src="asset/vendor/jquery/jquery.min.js"></script>
+
+
+<?php 
+include 'conn.php';
+
+$query = "SELECT * FROM dokumen";
+$result = mysqli_query($conn, $query);
+$dokumen = mysqli_num_rows($result);
+
+$query = "SELECT * FROM klasifikasi";
+$result = mysqli_query($conn, $query);
+$klasifikasi = mysqli_num_rows($result);
+
+if($dokumen > 0 || $klasifikasi > 0) {
+  echo "<script>
+  $(document).ready(function() {
+      $('#exampleModal').modal('show');
+  });
+</script>";
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -35,22 +60,50 @@
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            
+
                             <div class="col-lg-12">
+                                <!-- Modal -->
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Sudah ada data</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Sudah ada data di dalam program, lanjutkan langsung ke dashboard?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Tidak</button>
+                                                <a href="form-testing.php" class="btn btn-primary">Ya</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Aplikasi Klasifikasi Menggunakan K Nearest Neighbour</h1>
+                                        <h1 class="h4 text-gray-900 mb-4">Aplikasi Klasifikasi Menggunakan K Nearest
+                                            Neighbour</h1>
                                         <h1 class="h4 text-gray-900 mb-4">UAS Strategi Bahasa Alamiah Kelompok 8</h1>
-                                        
-                                        
-                                            <p>Muhammad Eri Setyawan - 2011501778</p>
-                                            <p>Dzulfikar Saif assalam - 2011500770</p>
-                                        
+
+
+                                        <p>Muhammad Eri Setyawan - 2011501778</p>
+                                        <p>Dzulfikar Saif assalam - 2011500770</p>
+
                                     </div>
-                                   
+
                                     <hr>
                                     <div class="text-center">
-                                    <a href="form.php" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Mulai</a>
+                                        <a href="form.php" class="btn btn-primary btn-lg active" role="button"
+                                            aria-pressed="true">Mulai</a>
                                     </div>
                                 </div>
                             </div>
@@ -65,7 +118,6 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="asset/vendor/jquery/jquery.min.js"></script>
     <script src="asset/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
